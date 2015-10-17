@@ -1,6 +1,4 @@
-﻿#include <iostream>
-
-using namespace std;
+﻿#include "io.h"
 
 struct node_list{
 	int val;
@@ -20,3 +18,5 @@ int erase(int, node_list *&, node_list *&);
 int sorting(node_list *&, node_list *&);
 
 void print(node_list *);
+
+int menuList();

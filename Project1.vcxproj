@@ -64,12 +64,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="doublyLinkedList.h" />
     <ClInclude Include="io.h" />
     <ClInclude Include="list.h" />
     <ClInclude Include="queue.h" />
     <ClInclude Include="stack.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="doublyLinkedList.cpp" />
     <ClCompile Include="io.cpp" />
     <ClCompile Include="list.cpp" />
     <ClCompile Include="main.cpp" />

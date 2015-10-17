@@ -1,6 +1,6 @@
-﻿#include "io.h"
+﻿#include "doublyLinkedList.h"
 
 int main()
 {
-	return menuList();
+	return menuDoublyLinkedList();
 }

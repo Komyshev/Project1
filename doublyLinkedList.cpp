@@ -1,225 +1,222 @@
-﻿#include "list.h"
+﻿#include "doublyLinkedList.h"
 
 
 /*    BRIEF: Добавление элементов в начало списка
 
-         IN:   val - значение
+		 IN:   val - значение
 
-               begin - указатель на начало списка
+			 begin - указатель на начало списка
 
-               end - указатель на конец списка
-                     (на случай, если список был пуст)	
+			   end - указатель на конец списка
+					 (на случай, если список был пуст)
 */
 
-void addBegin(int val, node_list *&begin, node_list *&end)
+void addBegin(int val, node_doublyLinkedList *&begin, node_doublyLinkedList *&end)
 {
-	node_list *var = new node_list;
-	
+	node_doublyLinkedList *var = new node_doublyLinkedList;
+
 	var->val = val;
 	var->next = begin;
-	
-	begin = var;
-	
-	if (!end) 
+
+	if (begin)
 	{
-		end = begin;             //  В случае, когда список был пуст,
-    }                            //  значение end должно быть изменено
+		begin->prev = var;
+	}
+	else
+	{
+		end = var;
+	}
+
+	begin = var;
 }
 
 /*    BRIEF: Добавление элементов в конец списка
 
-         IN:    val - значение
+		 IN:    val - значение
 
-              begin - указатель на начало списка
-                      (на случай, если список был пуст)
+			  begin - указатель на начало списка
+					  (на случай, если список был пуст)
 
-                end - указатель на конец списка
+				end - указатель на конец списка
 */
 
-void addEnd(int val, node_list *&begin, node_list *&end)
+void addEnd(int val, node_doublyLinkedList *&begin, node_doublyLinkedList *&end)
 {
-	node_list *var = new node_list;
-	
+	node_doublyLinkedList *var = new node_doublyLinkedList;
+
 	var->val = val;
-	var->next = NULL;
-	
-    if (end) 
+
+	if (end)
 	{
-		end->next = var;           
+		end->next = var;
+		var->prev = end;
+		end = var;
 	}
-    else 
-	{									//  В случае, когда список был пуст,
-			begin = var;                //  значение begin должно быть изменено
+	else
+	{
+		begin = var;
+		end = var;
 	}
-    
-	end = var;
 }
 
 /*	BRIEF: Добавить после элемента с заданным значением
 
 	   IN: val - значение нового элемента
-	   
-	   		 n - значение элемента, после которого 
-			   	 будет добавлен новый элемент
-			 
-			   	 
+
+			n - значение элемента, после которого
+				будет добавлен новый элемент
+
+
 	  OUT:   1 - список пуст или заданное значение val в нем отсутствует
-		 	
+
 */
 
-int addAfter(int val, int n, node_list *begin, node_list *&end)
+int addAfter(int val, int n, node_doublyLinkedList *begin, node_doublyLinkedList *&end)
 {
 	if (!begin)
 	{
 		return 1;
 	}
-	
+
 	while (begin->val != n)	         //  найдем адрес элемента 
 	{                                //  с заданным значением n
 		begin = begin->next;         //  либо адрес будет в begin,
-		     
-		if (!begin) 
+
+		if (!begin)
 		{
 			return 1;                //  либо фукция вернет 1
-		}				             
-	}                                
-	
-	node_list *temp = new node_list;
-	
+		}
+	}
+
+	node_doublyLinkedList *temp = new node_doublyLinkedList;
+
 	temp->val = val;
 	temp->next = begin->next;
+	temp->prev = begin;
 	
 	begin->next = temp;
-	                                  
-									  
-	if (begin == end)                 //  если новый элемент был добавлен
-	{                                 //  после последнего, то значение
-		end = temp;                   //  end должно быть изменено на адрес 
-	}                                 //  нового элемента
-	                                  
+	
+	if (temp->next)
+	{
+		temp->next->prev = temp;
+	}
+	else
+	{
+		end = temp;
+	}
+	
 	return 0;
 }
 
 /*	BRIEF: BRIEF: Добавить перед элементом с заданным значением
 
 	   IN: val - значение нового элемента
-	   
-	   		 n - значение элемента, перед которым
-			   	 будет добавлен новый элемент
-			 
-			   	 
+
+			 n - значение элемента, перед которым
+				 будет добавлен новый элемент
+
+
 	  OUT:   1 - список пуст или заданное значение val в нем отсутствует
-		 	
+
 */
 
-int addBefore(int val, int n, node_list *&begin, node_list *end)
+int addBefore(int val, int n, node_doublyLinkedList *&begin, node_doublyLinkedList *end)
 {
 	if (!begin)
 	{
 		return 1;
 	}
-	
-	if (begin->val == n)                   //  если элемент со значением n
-	{                                      //  есть первый элемент в списке,
-		node_list *temp = new node_list;
+
+	node_doublyLinkedList *buf = begin;
+
+	while (buf->val != n)
+	{
+		buf = buf->next;                     // в buf будет храниться адрес элемента со значением n
 		
-		temp->val = val;
-		temp->next = begin;                
-		                                   //  теперь первым будет элемент 
-		begin = temp;                      //  с адресом temp
-		
-		return 0;
+		if (!buf)
+		{
+			return 0;
+		}
+	}
+
+	node_doublyLinkedList *temp = new node_doublyLinkedList;
+
+	temp->val = val;
+	temp->next = buf;
+	temp->prev = buf->prev;
+
+	buf->prev = temp;
+
+	if (temp->prev)
+	{
+		temp->prev->next = temp;
 	}
 	else
 	{
-		node_list *buf = begin;	            
-		                                   
-		while ((buf->next)->val != n)	   //  найдем адрес элемента, 
-		{                                  //  за которым следует элемент
-			buf = buf->next;               //  со значением n
-			if (!buf->next)                //  либо адрес будет в buf,
-			{                              
-				return 1;	               //  либо функция вернет 1
-			} 
-		}                                  
-		                                   
-		node_list *temp = new node_list;
-		
-		temp->val = val;
-		temp->next = buf->next;
-		
-		buf->next = temp;
-		
-		return 0;
-	}	
+		begin = temp;
+	}
+	
+	return 0;
 }
 
 /*	BRIEF: Удалить элемент с заданным значением
 
-	   IN:	n - значение элемента, который
-		    	будет удален			 
-			   	 
-	  OUT:  1 - список пуст или заданное значение val в нем отсутствует
-		 	
+IN:	n - значение элемента, который
+будет удален
+
+OUT:  1 - список пуст или заданное значение val в нем отсутствует
+
 */
 
-int erase(int n, node_list *&begin, node_list *&end)
+int erase(int n, node_doublyLinkedList *&begin, node_doublyLinkedList *&end)
 {
 	if (!begin)
 	{
 		return 1;
 	}
-	
-	if (begin->val == n)                   //  если элемент со значением n
-	{                                      //  есть первый элемент в списке,
-		node_list *temp = begin->next;	
-		
-		delete (begin);
-		
-		begin = temp;
-		
-		if (!begin)
+
+	node_doublyLinkedList *buf = begin;
+
+	while (buf->val != n)
+	{
+		buf = buf->next;                     // в buf будет храниться адрес элемента со значением n
+
+		if (!buf)
 		{
-			end = begin;
+			return 1;
 		}
-		
-		return 0;
+	}
+
+	if (buf->prev)
+	{
+		buf->prev->next = buf->next;
 	}
 	else
 	{
-		node_list *buf = begin;	            
-		                                   
-		while ((buf->next)->val != n)	   //  найдем адрес элемента, 
-		{                                  //  за которым следует элемент
-			buf = buf->next;               //  со значением n
-			if (!buf->next)                //  либо адрес будет в buf,
-			{
-				return 1;	               //  либо функция вернет 1
-			}
-			
-		}                                  
-		                                   
-		node_list *temp = buf->next;
+		begin = buf->next;
+	}
+
+
+	if (buf->next)
+	{
+		buf->next->prev = buf->prev;
+	}
+	else
+	{
+		end = buf->prev;
+	}
 		
-		buf->next = temp->next;
-		
-		delete (temp);
-		
-		if (!buf->next) 
-		{
-			end = buf;                     //  если удалили последний..
-		}
-		
-		return 0;
-	}	
+	delete buf;
+
+	return 0;
 }
 
 /*	BRIEF: Сортировка
 
-	  OUT:  1 - список пуст
+OUT:  1 - список пуст
 */
 
-int sorting(node_list *&begin, node_list *&end)
+int sorting(node_doublyLinkedList *&begin, node_doublyLinkedList *&end)
 {
 	if (!begin)                                   //  если список пуст
 	{
@@ -231,14 +228,14 @@ int sorting(node_list *&begin, node_list *&end)
 		return 1;
 	}
 
-	node_list *end_assist = NULL;
+	node_doublyLinkedList *end_assist = NULL;
 
 
 	while (begin->next != end_assist)
 	{
 		if (begin->val > begin->next->val)
 		{
-			node_list *temp = begin->next;
+			node_doublyLinkedList *temp = begin->next;
 
 			begin->next = temp->next;
 			temp->next = begin;
@@ -253,13 +250,13 @@ int sorting(node_list *&begin, node_list *&end)
 			begin = temp;
 		}
 
-		node_list *current = begin;
+		node_doublyLinkedList *current = begin;
 
 		while (current->next->next != end_assist)
 		{
 			if (current->next->val > current->next->next->val)
 			{
-				node_list *temp1 = current->next, *temp2 = temp1->next;
+				node_doublyLinkedList *temp1 = current->next, *temp2 = temp1->next;
 
 				temp1->next = temp2->next;
 				temp2->next = temp1;
@@ -274,38 +271,65 @@ int sorting(node_list *&begin, node_list *&end)
 		}
 		end_assist = current->next;
 	}
+
+	node_doublyLinkedList *temp = NULL, *current = begin;
+	while (current)
+	{
+		current->prev = temp;
+		temp = current;
+		current = current->next;
+	}
+
 	return 0;
 }
 
 /* print, просто print.. */
 
-void print(node_list *begin)
+void print(node_doublyLinkedList *begin)
 {
-	if (!begin) 
+	if (!begin)
 	{
 		cout << "<Cписок пуст>";
 	}
-	
+
 	while (begin)
-    {
-	    cout << (*begin).val << " ";
-	    begin = (*begin).next;
-    }
-    
+	{
+		cout << (*begin).val << " ";
+		begin = (*begin).next;
+	}
+
+	cout << endl << endl;
+}
+
+/* Вывод с конца */
+
+void printConversely(node_doublyLinkedList *end)
+{
+	if (!end)
+	{
+		cout << "<Cписок пуст>";
+	}
+
+	while (end)
+	{
+		cout << (*end).val << " ";
+		end = (*end).prev;
+	}
+
 	cout << endl << endl;
 }
 
 /*	BRIEF: Меню
 
-	  OUT: 0 - когда был выбрал пункт выход
+OUT: 0 - когда был выбрал пункт выход
 */
 
-int menuList()
+int menuDoublyLinkedList()
 {
 	setlocale(LC_ALL, "Rus");
 
-	node_list *begin = NULL;
-	node_list *end = NULL;
+	node_doublyLinkedList *begin = NULL;
+	node_doublyLinkedList *end = NULL;
 
 	int m;
 	while (1)
@@ -320,11 +344,12 @@ int menuList()
 		cout << "5. Удалить элемент равный n." << endl << endl;
 		cout << "6. Сортировка." << endl << endl;
 		cout << "7. Вывести список." << endl << endl;
+		cout << "8. Вывести список. (с конца и в обратном порядке)" << endl << endl;
 		cout << "0. Выход." << endl << endl;
 
 
 		cout << "Выберете пункт меню: ";
-		while (scanIntVal(m) || (m < 0) || (m > 7))
+		while (scanIntVal(m) || (m < 0) || (m > 8))
 		{
 			cout << "\nОшибка. Попробуйте еще раз.\n\nВыберете пункт меню: ";
 		}
@@ -599,11 +624,17 @@ int menuList()
 			system("PAUSE");
 			break;
 		}
+		case 8:
+		{
+			printConversely(end);
+			system("PAUSE");
+			break;
+		}
 		default:
 		{
 			while (begin)
 			{
-				node_list *temp = (*begin).next;
+				node_doublyLinkedList *temp = (*begin).next;
 				delete begin;
 				begin = temp;
 			}
