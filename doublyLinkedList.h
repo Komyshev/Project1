@@ -28,3 +28,5 @@ void print(node_doublyLinkedList *);
 void printConversely(node_doublyLinkedList *);
 
 int menuDoublyLinkedList();
+
+int debug();

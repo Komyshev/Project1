@@ -211,14 +211,77 @@ int erase(int n, node_doublyLinkedList *&begin, node_doublyLinkedList *&end)
 	return 0;
 }
 
-/*	BRIEF: Сортировка
+/*	BRIEF: Сортировка (метод пузырька)
 
-OUT:  1 - список пуст
+	  OUT:  1 - список пуст
 */
 
 int sorting(node_doublyLinkedList *&begin, node_doublyLinkedList *&end)
 {
 	if (!begin)                                   //  если список пуст
+	{
+		return 1;
+	}
+
+	if (!(begin->next))                           //  если в списке
+	{                                             //  всего один элемент
+		return 1;
+	}
+
+	node_doublyLinkedList *endAssist = end;
+
+	while (endAssist != begin)
+	{
+		node_doublyLinkedList *current = begin;
+		while (current != endAssist)
+		{
+			if (current->val > current->next->val)
+			{
+				node_doublyLinkedList *first = current, *second = current->next;
+
+				first->next = second->next;
+				second->next = first;
+
+				second->prev = first->prev;
+				first->prev = second;
+
+
+
+				if (second->prev)
+				{
+					second->prev->next = second;
+				}
+				else
+				{
+					begin = second;
+				}
+
+				if (first->next)
+				{
+					first->next->prev = first;
+				}
+				else
+				{
+					end = first;
+				}
+
+				if (second == endAssist)
+				{
+					endAssist = current;
+				}
+
+			}
+			else
+			{
+				current = current->next;
+			}
+		}
+		endAssist = endAssist->prev;
+	}
+
+
+	return 0;
+	/*if (!begin)                                   //  если список пуст
 	{
 		return 1;
 	}
@@ -280,7 +343,7 @@ int sorting(node_doublyLinkedList *&begin, node_doublyLinkedList *&end)
 		current = current->next;
 	}
 
-	return 0;
+	return 0;*/
 }
 
 /* print, просто print.. */
@@ -642,4 +705,21 @@ int menuDoublyLinkedList()
 		}
 		}
 	}
+}
+
+int debug()
+{
+	node_doublyLinkedList *begin = NULL, *end = NULL;
+
+	for (int i = 10; i > 0; i--)
+	{
+		addEnd(i, begin, end);
+	}
+
+	print(begin);
+
+	sorting(begin, end);
+
+	system("PAUSE");
+	return 0;
 }
