@@ -422,7 +422,7 @@ int menuList()
 
 				if (addAfter(val, n, begin, end))
 				{
-					cout << "Список пуст или такого элемента в нем нет." << endl << endl;
+					cout << endl << endl << "Список пуст или такого элемента в нем нет." << endl << endl;
 					cout << "1. Добавить в начало." << endl << endl;
 					cout << "2. Добавить в конец." << endl << endl;
 					cout << "3. Попробовать еще раз." << endl << endl;
@@ -501,7 +501,7 @@ int menuList()
 
 				if (addBefore(val, n, begin, end))
 				{
-					cout << "Список пуст или такого элемента в нем нет." << endl << endl;
+					cout << endl << endl << "Список пуст или такого элемента в нем нет." << endl << endl;
 					cout << "1. Добавить в начало." << endl << endl;
 					cout << "2. Добавить в конец." << endl << endl;
 					cout << "3. Попробовать еще раз." << endl << endl;
@@ -546,6 +546,13 @@ int menuList()
 		}
 		case 5:
 		{
+			if (!begin)
+			{
+				print(begin);
+				system("PAUSE");
+				break;
+			}
+
 			int a;
 			while (1)
 			{

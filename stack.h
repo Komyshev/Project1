@@ -1,5 +1,4 @@
-﻿#include <iostream>
-using namespace std;
+﻿#include "io.h"
 
 struct node_s {
 	int val;
@@ -9,3 +8,5 @@ struct node_s {
 void push(int, node_s **);
 int pop(node_s **);
 void print(node_s *);
+
+int menuStack();

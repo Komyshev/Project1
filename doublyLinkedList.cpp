@@ -239,33 +239,33 @@ int sorting(node_doublyLinkedList *&begin, node_doublyLinkedList *&end)
 			{
 				node_doublyLinkedList *first = current, *second = current->next;
 
-				first->next = second->next;
+				first->next = second->next;     // переназначаем поля next
 				second->next = first;
 
-				second->prev = first->prev;
+				second->prev = first->prev;     // переназначаем поля prev
 				first->prev = second;
 
 
 
-				if (second->prev)
+				if (second->prev)                  // изменяем поле prev следущего (за двумя, которые меняли) элемента
 				{
-					second->prev->next = second;
+					second->prev->next = second;   // если это возможно
 				}
 				else
 				{
 					begin = second;
 				}
 
-				if (first->next)
+				if (first->next)                  // изменяем поле next предшествующего (двум, которые меняли) элемента
 				{
-					first->next->prev = first;
+					first->next->prev = first;    // если это возможно
 				}
 				else
 				{
 					end = first;
 				}
 
-				if (second == endAssist)
+				if (second == endAssist)          // изменяем endAssist
 				{
 					endAssist = current;
 				}
@@ -279,71 +279,7 @@ int sorting(node_doublyLinkedList *&begin, node_doublyLinkedList *&end)
 		endAssist = endAssist->prev;
 	}
 
-
 	return 0;
-	/*if (!begin)                                   //  если список пуст
-	{
-		return 1;
-	}
-
-	if (!(begin->next))                           //  если в списке
-	{                                             //  всего один элемент
-		return 1;
-	}
-
-	node_doublyLinkedList *end_assist = NULL;
-
-
-	while (begin->next != end_assist)
-	{
-		if (begin->val > begin->next->val)
-		{
-			node_doublyLinkedList *temp = begin->next;
-
-			begin->next = temp->next;
-			temp->next = begin;
-
-			if (!(begin->next))                       //  на случай, если в списке
-			{                                         //  всего два элемента
-				end = begin;
-				begin = temp;
-				return 0;
-			}
-
-			begin = temp;
-		}
-
-		node_doublyLinkedList *current = begin;
-
-		while (current->next->next != end_assist)
-		{
-			if (current->next->val > current->next->next->val)
-			{
-				node_doublyLinkedList *temp1 = current->next, *temp2 = temp1->next;
-
-				temp1->next = temp2->next;
-				temp2->next = temp1;
-				current->next = temp2;
-
-				if (!(temp1->next))
-				{
-					end = temp1;
-				}
-			}
-			current = current->next;
-		}
-		end_assist = current->next;
-	}
-
-	node_doublyLinkedList *temp = NULL, *current = begin;
-	while (current)
-	{
-		current->prev = temp;
-		temp = current;
-		current = current->next;
-	}
-
-	return 0;*/
 }
 
 /* print, просто print.. */
@@ -510,7 +446,7 @@ int menuDoublyLinkedList()
 
 				if (addAfter(val, n, begin, end))
 				{
-					cout << "Список пуст или такого элемента в нем нет." << endl << endl;
+					cout << endl << endl << "Список пуст или такого элемента в нем нет." << endl << endl;
 					cout << "1. Добавить в начало." << endl << endl;
 					cout << "2. Добавить в конец." << endl << endl;
 					cout << "3. Попробовать еще раз." << endl << endl;
@@ -589,7 +525,7 @@ int menuDoublyLinkedList()
 
 				if (addBefore(val, n, begin, end))
 				{
-					cout << "Список пуст или такого элемента в нем нет." << endl << endl;
+					cout << endl << endl << "Список пуст или такого элемента в нем нет." << endl << endl;
 					cout << "1. Добавить в начало." << endl << endl;
 					cout << "2. Добавить в конец." << endl << endl;
 					cout << "3. Попробовать еще раз." << endl << endl;
@@ -634,6 +570,13 @@ int menuDoublyLinkedList()
 		}
 		case 5:
 		{
+			if (!begin)
+			{
+				print(begin);
+				system("PAUSE");
+				break;
+			}
+
 			int a;
 			while (1)
 			{
@@ -705,21 +648,4 @@ int menuDoublyLinkedList()
 		}
 		}
 	}
-}
-
-int debug()
-{
-	node_doublyLinkedList *begin = NULL, *end = NULL;
-
-	for (int i = 10; i > 0; i--)
-	{
-		addEnd(i, begin, end);
-	}
-
-	print(begin);
-
-	sorting(begin, end);
-
-	system("PAUSE");
-	return 0;
 }

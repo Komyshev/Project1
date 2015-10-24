@@ -1,5 +1,16 @@
 ﻿#include "io.h"
 
+int scanInt(int &a)
+{
+	cout << "Введите значение: ";
+	while (scanIntVal(a))
+	{
+		cout << endl << "Ошибка!! Повторите ввод: ";
+	}
+
+	return a;
+}
+
 bool scanIntVal(int &a)
 {
 	if (!(cin >> a))

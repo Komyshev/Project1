@@ -4,6 +4,7 @@
 
 using namespace std;
 
+int scanInt(int &);
 
 bool scanIntVal(int &);
 
